@@ -33,7 +33,7 @@ return(
   // </>  
   <Router>
     <div>
-    <Navbar updateSearchResults={updateSearchResults}  />
+    <Navbar updateSearchResults={updateSearchResults} onPlay={handlePlay} />
     {searchResults.length > 0 && <SearchResults results={searchResults} />}
   <Routes>
         <Route path="/" element={<SongList onPlay={handlePlay} />} />
