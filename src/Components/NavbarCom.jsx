@@ -61,8 +61,6 @@ function Navbar ({onPlay}){
  <div className="navbar">
             <div className="left-section">
                 <span>Home</span>
-                <span>Popular</span>
-                <span>Recommend</span>
             </div>
             <div className="right-section">
                 <input type="text"
