@@ -1,47 +1,38 @@
-import './App.css'
+import './App.css';
 import Navbar from './Components/NavbarCom.jsx';
-// import Home from './Components/Home.jsx';
-// import SearchResults from './Components/SearchResults.jsx';
-// import AudioPlayer from './Components/Player.jsx'
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import SongCard from './Components/SongCard.jsx';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import MusicPlayer from './Components/MusicPlayerCom.jsx';
-import { newSongs } from './lib/catchedSong.js';
 import SongList from './Components/SongList';
+import SearchResults from './Components/SearchResults';
 
 function App() {
-
   const [searchResults, setSearchResults] = useState([]);
-
-    const updateSearchResults = (results) => {
-        setSearchResults(results);
-    };
   const [currentSong, setCurrentSong] = useState(null);
 
   const handlePlay = (song) => {
     setCurrentSong(song);
+    navigate('/player');
   };
-return(
-  // <>
-  // <Navbar updateSearchResults={updateSearchResults} />
-  // {searchResults.length > 0 && <SearchResults results={searchResults} />}
-  // {/* <searchResults /> */}
-  // <Home />
-  // <MusicPlayer />
-  // {/* <AudioPlayer /> */}
-  // </>  
-  <Router>
+
+  const navigate = useNavigate();
+
+  return (
     <div>
-    <Navbar updateSearchResults={updateSearchResults} onPlay={handlePlay} />
-    {searchResults.length > 0 && <SearchResults results={searchResults} />}
-  <Routes>
+      <Navbar updateSearchResults={setSearchResults} />
+      <Routes>
         <Route path="/" element={<SongList onPlay={handlePlay} />} />
-        <Route path="/player" element={<MusicPlayer currentSong={currentSong} />} />
-    </Routes>
+        <Route path="/search" element={<SearchResults searchResults={searchResults} handlePlay={handlePlay} />} />
+        <Route path="/player" element={currentSong && <MusicPlayer currentSong={currentSong} />}  />
+      </Routes>
     </div>
-</Router>
-)
+  );
 }
 
-export default App;
+export default function AppWrapper() {
+  return (
+    <Router>
+      <App />
+    </Router>
+  );
+}
