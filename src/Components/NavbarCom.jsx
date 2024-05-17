@@ -2,12 +2,22 @@ import React, { useEffect, useState } from 'react';
 import Search from '../assets/img/system-solid-42-search .png'
 import { getSongsByQuery } from '../lib/fetch';
 // import ArtistCard from './ArtistCard';
+import { useNavigate } from 'react-router-dom';
+import SearchResults from './SearchResults';
 
 
-const Navbar = () => {
+
+function Navbar ({onPlay}){
     const [darkMode, setDarkMode] = useState(false);
     const [query, setQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
+
+    const navigate = useNavigate();
+
+  const handlePlay = (song) => {
+    onPlay(song);
+    navigate('/player');
+  };
 
     useEffect(() => {
         // Check if dark mode preference is saved in local storage
@@ -45,27 +55,12 @@ const Navbar = () => {
             handleSearch();
         }
     };
-    const handleArtistClick = async (artistName) => {
-        try {
-            const response = await getSongsByQuery(artistName);
-            const artistSongs = await response.json();
-            if (artistSongs.length > 0) {
-                const firstSong = artistSongs[0]; 
-                setData(firstSong); 
-                setPlaying(true); 
-            } else {
-                console.error(`No songs found for artist: ${artistName}`);
-            }
-        } catch (error) {
-            console.error('Error fetching songs by artist:', error);
-        }
-    };
-
+    
     return(    
         <>
  <div className="navbar">
             <div className="left-section">
-                <span>Playlist</span>
+                <span>Home</span>
                 <span>Popular</span>
                 <span>Recommend</span>
             </div>
@@ -93,17 +88,23 @@ const Navbar = () => {
                 </div>
             </div>
         </div>
-        {searchResults.length > 0 && (
-                <div className="search-results">
-                    {/* Display search results using ArtistCard component */}
-                    {searchResults.map((result, index) => (
-                        <div key={index} className="search-result-item">
-                            <img src={result.image} alt={result.name} />
-                            <p>{result.name}</p>
-                        </div>
-                    ))}
-                </div>
-            )}
+        {/* <div className="section">
+        <h1 className="section-title">🔎 Search <span className="text-primary">.</span></h1>
+        <div className="song-list">
+          {searchResults.map(song => (
+            <div key={song.id} className="song-card" onClick={() => handlePlay(song)}>
+              <img src={song.image} alt={song.title} />
+              <div className="song-info">
+                <h3>{song.song}</h3>
+                <p>{song.singers || 'unknown'}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div> */}
+     {searchResults.length > 0 && ( 
+        <SearchResults searchResults={searchResults} handlePlay={handlePlay} />
+      )}
         </>
     );
 

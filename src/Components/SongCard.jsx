@@ -1,19 +1,24 @@
+// SongCard.jsx
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const SongCard = ({ title, image, artist, id }) => {
-    return (
-        <a href={"/" + id} className="cursor-pointer" title={title}>
-            <div className="rounded-md h-fit w-fit grid gap-2">
-                <div>
-                    <img className="song-image" src={image} alt={title} />
-                </div>
-                <div className="grid place-content-center text-center">
-                    <h1 className="song-title">{title}</h1>
-                    <p className="song-artist">{artist}</p>
-                </div>
-            </div>
-        </a>
-    );
-};
+function SongCard({ id, image, artist, title, onPlay }) {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    onPlay({ id, image, artist, title, media_url: `path/to/song${id}.mp3` });
+    navigate(`/player/${id}`);
+  };
+
+  return (
+    <div className="song-card" onClick={handleClick}>
+      <img src={image} alt={title} />
+      <div className="song-info">
+        <h3>{title}</h3>
+        <p>{artist}</p>
+      </div>
+    </div>
+  );
+}
 
 export default SongCard;

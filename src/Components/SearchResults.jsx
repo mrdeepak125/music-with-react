@@ -1,29 +1,22 @@
 import React from 'react';
 
+function SearchResult({ searchResults, handlePlay }) {
+  return (
+    <div className="section">
+      <h1 className="section-title">🔎 Search <span className="text-primary">.</span></h1>
+      <div className="song-list">
+        {searchResults.map((song) => (
+          <div key={song.id} className="song-card" onClick={() => handlePlay(song)}>
+            <img src={song.image} alt={song.title} />
+            <div className="song-info">
+              <h3>{song.song}</h3>
+              <p>{song.singers || 'unknown'}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
-const SearchResults = ({ data }) => {
-    // Check if data is defined and an array before rendering
-    if (!data || !Array.isArray(data)) {
-        return <div>No results found</div>;
-    }
-
-    return (
-        <div className="search-results">
-            <h2>Search Results</h2>
-            <ul>
-                {data.map((result, index) => (
-                    <li key={index}>
-                        {/* Display image if available */}
-                        {result.image && <img src={result.image} alt={result.title} />}
-                        <div>
-                            <h3>{result.title}</h3>
-                            <p>Artists: {result.primary_artists.join(', ')}</p>
-                        </div>
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
-};
-
-export default SearchResults;
+export default SearchResult;

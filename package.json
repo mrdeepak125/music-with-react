@@ -10,15 +10,30 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.5.2",
+    "@fortawesome/free-regular-svg-icons": "^6.5.2",
+    "@fortawesome/free-solid-svg-icons": "^6.5.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@lordicon/element": "^1.6.0",
     "@spotify/web-api-ts-sdk": "^1.2.0",
     "bootstrap": "^5.3.3",
+    "class-variance-authority": "^0.7.0",
     "jiosavan": "^1.0.4",
+    "link": "^2.1.1",
     "lottie-web": "^5.12.2",
+    "lucide-react": "^0.378.0",
+    "nextjs-routes": "^2.1.0",
+    "radix-ui": "^1.0.1",
     "react": "^18.3.1",
-    "react-dom": "^18.2.0",
+    "react-dom": "^18.3.1",
+    "react-h5-audio-player": "^3.9.1",
+    "react-hot-toast": "^2.4.1",
+    "react-router-dom": "^6.23.1",
+    "react-toastify": "^10.0.5",
     "shazam-api": "^0.2.0",
-    "spotify-web-api-node": "^5.0.2"
+    "spotify-web-api-node": "^5.0.2",
+    "switch": "^0.0.0",
+    "tailwind-merge": "^2.3.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
@@ -27,6 +42,7 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.6"
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "tailwindcss": "^3.4.3"
   }
 }
