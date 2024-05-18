@@ -2,6 +2,7 @@ import React from 'react';
 
 function SearchResults({ searchResults, handlePlay }) {
   return (
+    <div className="container">
     <div className="section">
       <h1 className="section-title">🔎 Search Results</h1>
       <div className="song-list">
@@ -15,6 +16,7 @@ function SearchResults({ searchResults, handlePlay }) {
           </div>
         ))}
       </div>
+    </div>
     </div>
   );
 }

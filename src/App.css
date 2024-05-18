@@ -29,6 +29,7 @@ body{
   background-color: var(--gray);
   color: #fff;
   user-select: none;
+  width: 100%;
 }
 
 .left-section span {
@@ -346,9 +347,17 @@ img{
 }
 
 .song-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  overflow-x: scroll;
+  overflow-y: scroll;
+  white-space: nowrap;
+  padding: 67px;
+  gap: 30px;
 }
 
 .song-card {
@@ -366,11 +375,19 @@ img{
 .song-info h3 {
   font-size: 18px;
   margin: 10px 0;
+  max-width: 5.625rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .song-info p {
   font-size: 14px;
-  color: gray;
+  color: var(--white);
+  max-width: 5.625rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .music-player {
@@ -425,24 +442,61 @@ img{
 }
 
 .progress-circle {
-  width: 50px;
-  height: 50px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: white;
   color: black;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: x-small;
+  font-weight: 700;
+  padding: 0;
 }
-
-@media (max-width: 250px){
+.offline-song-card{
+  width: 31%;
+    display: flex;
+    border-radius: 50%;
+    height: 0%;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+.offline-song-card img {
+  width: 50%;
+  border-radius: 50%;
+  height: 50%;
+}
+.offline-control{
+  width: 300px;
+}
+.left-section a{
+  font-size: 18px;
+  display: inline-flex;
+  outline: 0;
+  border: 0;
+  cursor: pointer;
+  will-change: box-shadow, transform;
+  text-decoration: none;
+  gap: 42px;
+  padding: 3px 5px;
+  margin: 10px;
+  color: var(--white);
+}
+.suggestions{
+  margin: 10px;
+}
+@media (max-width: 800px){
   .navbar{
     display: flex;
     flex-direction: row;
-    width: max-content;
+    /* width: 100%; */
   }
   .right-section input{
-    width: 10rem;
+    width: 17rem;
   }
   .container{
     display: flex;
@@ -458,114 +512,7 @@ img{
     align-items: center;
   }
   .song-list{
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
-  }
-  .contlorls{
-    display: inline-flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
-    max-width: -webkit-fill-available;
-    flex-direction: row;
-    margin-top: 60px;
-}
-  
-  .contlorls button{
-    display: inline-flex;
-    gap: 1.6rem;
-    align-items: center;
-    justify-content: center;
-    margin: 5px;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    border-radius: 30px;
-  }
-}
-
-
-@media (max-width: 450px){
-  .navbar{
-    display: flex;
-    flex-direction: row;
-    width: max-content;
-  }
-  .right-section input{
-    width: 12rem;
-  }
-  .container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  .section{
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
-  }
-  .song-list{
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
-  }
-  .contlorls{
-    display: inline-flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
-    max-width: -webkit-fill-available;
-    flex-direction: row;
-    margin-top: 60px;
-}
-  
-  .contlorls button{
-    display: inline-flex;
-    gap: 1.6rem;
-    align-items: center;
-    justify-content: center;
-    margin: 5px;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    border-radius: 30px;
-  }
-}
-
-@media (max-width: 650px){
-  .navbar{
-    display: flex;
-    flex-direction: row;
-    /* width: auto; */
-  }
-  .right-section input{
-    width: 15rem;
-  }
-  .container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  .section{
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
-  }
-  .song-list{
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
+    width: 750px;
   }
   .contlorls{
     display: inline-flex;
@@ -594,4 +541,262 @@ img{
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+}
+@media (max-width: 680px){
+  .navbar{
+    display: flex;
+    flex-direction: row;
+    /* width: 100%t; */
+    flex-wrap: nowrap;
+  }
+  .right-section input{
+    width: 12rem;
+  }
+  .container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .section{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+  }
+  .song-list{
+    width: 551px;
+  }
+  .contlorls{
+    display: inline-flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    max-width: -webkit-fill-available;
+    flex-direction: row;
+    margin-top: 60px;
+}
+  
+  .contlorls button{
+    display: inline-flex;
+    gap: 1.6rem;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    border-radius: 30px;
+  }
+  .music-player {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin-top: 70px;
+  }
+  .left-section a {
+    font-size: 17px;
+    font-weight: bold;
+    display: inline-flex;
+    border: 0;
+    cursor: pointer;
+    text-decoration: none;
+    margin: 5px;
+    color: var(--white);
+    font-style: var(--sans);
+  }
+  .user-circle{
+    margin: 0;
+  }
+  .controls{
+    gap: 0.6rem;
+  }
+  .offline-song-card {
+    width: 100%;
+    display: flex;
+    border-radius: 50%;
+    height: 0%;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+}
+
+
+@media (max-width: 550px){
+  .navbar{
+    display: flex;
+    flex-direction: row;
+    /* width: 100%t; */
+    flex-wrap: nowrap;
+  }
+  .right-section input{
+    width: 8rem;
+  }
+  .container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .section{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+  }
+  .song-list{
+    width: 500px;
+  }
+  .contlorls{
+    display: inline-flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    max-width: -webkit-fill-available;
+    flex-direction: row;
+    margin-top: 60px;
+}
+  
+  .contlorls button{
+    display: inline-flex;
+    gap: 1.6rem;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    border-radius: 30px;
+  }
+  .music-player {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin-top: 70px;
+  }
+  .left-section a {
+    font-size: 13px;
+    font-weight: bold;
+    display: inline-flex;
+    border: 0;
+    cursor: pointer;
+    text-decoration: none;
+    margin: 5px;
+    color: var(--white);
+    font-style: var(--sans);
+  }
+  .user-circle{
+    margin: 0;
+  }
+  .controls{
+    gap: 0.6rem;
+  }
+  .offline-song-card {
+    width: 100%;
+    display: flex;
+    border-radius: 50%;
+    height: 0%;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+}
+
+
+@media (max-width : 450px){
+  .navbar{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+  .searchTerm img {
+    margin-right: 10px;
+  }
+  .right-section input{
+    width: 6rem;
+  }
+  .container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .section{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+  }
+  .song-list{
+    width: 350px;
+  }
+  .contlorls{
+    display: inline-flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    max-width: -webkit-fill-available;
+    flex-direction: row;
+    margin-top: 60px;
+}
+  
+  .contlorls button{
+    display: inline-flex;
+    gap: 1.6rem;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    border-radius: 30px;
+  }
+  .music-player {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin-top: 70px;
+  }
+  .left-section a {
+    font-size: 13px;
+    font-weight: bold;
+    display: inline-flex;
+    border: 0;
+    cursor: pointer;
+    text-decoration: none;
+    margin: 5px;
+    color: var(--white);
+    font-style: var(--sans);
+  }
+  .user-circle{
+    margin: 0;
+  }
+  .controls{
+    gap: 0.6rem;
+  }
+  .offline-song-card {
+    width: 100%;
+    display: flex;
+    border-radius: 50%;
+    height: 0%;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
 }

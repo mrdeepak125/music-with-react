@@ -1,8 +1,9 @@
-import { DownloadCloud } from 'lucide-react';
-import React, { useRef, useState, useEffect } from 'react';
+import { MusicContext } from './MusicContext';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import { saveSong } from '../lib/indexedDb';
 
-function MusicPlayer({ currentSong, suggestedSongs, handlePlay, handleAutoSuggest,song  }) {
+function MusicPlayer({ handleAutoSuggest  }) {
+  const { currentSong, suggestedSongs } = useContext(MusicContext);
   const audioRef = useRef(null);
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -75,22 +76,38 @@ function MusicPlayer({ currentSong, suggestedSongs, handlePlay, handleAutoSugges
       setPlaying(false);
     };
 
-    if (currentSong) {
+    // if (currentSong) {
+    //   audio.src = currentSong.media_url;
+    //   audio.load(); // Ensure the audio is loaded
+    //   audio.addEventListener('loadeddata', handleLoadedData);
+    //   audio.addEventListener('timeupdate', handleTimeUpdate);
+    //   audio.addEventListener('error', handleError);
+    // }
+    if (currentSong && currentSong.media_url) {
       audio.src = currentSong.media_url;
       audio.load(); // Ensure the audio is loaded
       audio.addEventListener('loadeddata', handleLoadedData);
       audio.addEventListener('timeupdate', handleTimeUpdate);
+      audio.addEventListener('ended', handleEnded);
       audio.addEventListener('error', handleError);
     }
 
     return () => {
-      if (audio) {
-        audio.removeEventListener('loadeddata', handleLoadedData);
-        audio.removeEventListener('timeupdate', handleTimeUpdate);
-        audio.removeEventListener('error', handleError);
-      }
-    };
-  }, [currentSong]);
+  //     if (audio) {
+  //       audio.removeEventListener('loadeddata', handleLoadedData);
+  //       audio.removeEventListener('timeupdate', handleTimeUpdate);
+  //       audio.removeEventListener('error', handleError);
+  //     }
+  //   };
+  // }, [currentSong]);
+  if (audio) {
+    audio.removeEventListener('loadeddata', handleLoadedData);
+    audio.removeEventListener('timeupdate', handleTimeUpdate);
+    audio.removeEventListener('ended', handleEnded);
+    audio.removeEventListener('error', handleError);
+  }
+};
+}, [currentSong, suggestedSongs, handleAutoSuggest]);
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
@@ -167,7 +184,6 @@ function MusicPlayer({ currentSong, suggestedSongs, handlePlay, handleAutoSugges
       };
       await saveSong(songData);
       setDownloadComplete(true);
-      // alert('Song downloaded and saved to IndexedDB!');
     } catch (error) {
       console.error('Failed to download song:', error);
       alert('Failed to download song');
@@ -176,6 +192,14 @@ function MusicPlayer({ currentSong, suggestedSongs, handlePlay, handleAutoSugges
     }
   };
 
+  const handleEnded = () => {
+    // Get the next song in the suggestedSongs list
+    const currentIndex = suggestedSongs.findIndex(song => song.id === currentSong.id);
+    const nextSong = suggestedSongs[currentIndex + 1];
+    if (nextSong) {
+      currentSong(nextSong);
+    }
+  };
   return (
     <div className="music-player">
       {currentSong && (
@@ -220,6 +244,16 @@ function MusicPlayer({ currentSong, suggestedSongs, handlePlay, handleAutoSugges
                 )}
               </button>
         </div>
+        <div className="suggestions">
+            <h3>Suggested Songs</h3>
+            <ul>
+              {suggestedSongs.map((song) => (
+                <li key={song.id} onClick={() => handleAutoSuggest(song)}>
+                  {song.song} by {song.singers || 'unknown'}
+                </li>
+              ))}
+            </ul>
+          </div>
         </>
       )}
     </div>
