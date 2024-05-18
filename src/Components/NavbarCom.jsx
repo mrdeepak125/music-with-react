@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Search from '../assets/img/system-solid-42-search .png';
 import { getSongsByQuery } from '../lib/fetch';
 import { useNavigate } from 'react-router-dom';
-
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 function Navbar({ updateSearchResults }) {
   const [darkMode, setDarkMode] = useState(false);
   const [query, setQuery] = useState('');
@@ -47,7 +47,8 @@ function Navbar({ updateSearchResults }) {
   return (
     <div className="navbar">
       <div className="left-section">
-        <span>Home</span>
+          <Link to="/">Home</Link>
+          <Link to="/downloads">Downloads</Link>
       </div>
       <div className="right-section">
         <input

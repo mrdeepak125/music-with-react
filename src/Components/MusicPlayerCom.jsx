@@ -1,7 +1,8 @@
 import { DownloadCloud } from 'lucide-react';
 import React, { useRef, useState, useEffect } from 'react';
+import { saveSong } from '../lib/indexedDb';
 
-function MusicPlayer({ currentSong }) {
+function MusicPlayer({ currentSong, suggestedSongs, handlePlay, handleAutoSuggest,song  }) {
   const audioRef = useRef(null);
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -121,37 +122,59 @@ function MusicPlayer({ currentSong }) {
     audioRef.current.currentTime = 0;
   };
 
-  const downloadSong = async () => {
-    setDownloadProgress(0);
+  
+  
+  useEffect(() => {
+    if (!currentSong && suggestedSongs.length > 0) {
+      // Automatically play the next suggested song
+      handleAutoSuggest(suggestedSongs[0]);
+    }
+  }, [currentSong, suggestedSongs, handleAutoSuggest]);
+
+  if (!currentSong) return null;
+
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  const handleDownloadClick = async (song) => {
+    setIsDownloading(true);
     setDownloadComplete(false);
-    const response = await fetch(currentSong.media_url);
-    const reader = response.body.getReader();
-    const contentLength = +response.headers.get('Content-Length');
-    let receivedLength = 0;
-    const chunks = [];
+    setDownloadProgress(0);
+    try {
+      const response = await fetch(song.media_url);
+      if (!response.ok) throw new Error('Network response was not ok');
 
-    while(true) {
-      const {done, value} = await reader.read();
+      const reader = response.body.getReader();
+      const contentLength = +response.headers.get('Content-Length');
+      let receivedLength = 0;
+      const chunks = [];
 
-      if (done) {
-        break;
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        chunks.push(value);
+        receivedLength += value.length;
+        setDownloadProgress(Math.floor((receivedLength / contentLength) * 100));
       }
 
-      chunks.push(value);
-      receivedLength += value.length;
-      setDownloadProgress(Math.floor((receivedLength / contentLength) * 100));
+      const blob = new Blob(chunks);
+      const songData = {
+        id: song.id,
+        title: song.song,
+        artist: song.singers,
+        image: song.image,
+        mediaUrl: song.media_url,
+        blob,
+      };
+      await saveSong(songData);
+      setDownloadComplete(true);
+      // alert('Song downloaded and saved to IndexedDB!');
+    } catch (error) {
+      console.error('Failed to download song:', error);
+      alert('Failed to download song');
+    } finally {
+      setIsDownloading(false);
     }
-
-    const blob = new Blob(chunks);
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${currentSong.song}.mp3`;
-    a.click();
-    URL.revokeObjectURL(url);
-    setDownloadComplete(true);
   };
-
 
   return (
     <div className="music-player">
@@ -183,19 +206,19 @@ function MusicPlayer({ currentSong }) {
        <button onClick={handleForward}>
           <ForwardIcon />
         </button>
-                  <button onClick={downloadSong} disabled={downloadProgress > 0 && downloadProgress < 100}>
-              {downloadComplete ? (
-                <SuccessIcon />
-              ) : (
-                downloadProgress > 0 ? (
-                  <div className="progress-circle">
-                    {downloadProgress}%
-                  </div>
+        <button onClick={() => handleDownloadClick(currentSong)} disabled={downloadProgress > 0 && downloadProgress < 100}>
+                {downloadComplete ? (
+                  <SuccessIcon />
                 ) : (
-                  <DownloadIcon />
-                )
-              )}
-            </button>
+                  downloadProgress > 0 ? (
+                    <div className="progress-circle">
+                      {downloadProgress}%
+                    </div>
+                  ) : (
+                    <DownloadIcon />
+                  )
+                )}
+              </button>
         </div>
         </>
       )}

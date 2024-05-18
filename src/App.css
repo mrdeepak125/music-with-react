@@ -409,6 +409,7 @@ img{
   align-items: center;
   justify-content: center;
   margin: 10px;
+  border-radius: 30px;
 }
 .download-section {
   margin-top: 10px;
