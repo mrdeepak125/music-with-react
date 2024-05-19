@@ -62,7 +62,7 @@ function App() {
         />
         <Route
           path="/player"
-          element={<MusicPlayer handleAutoSuggest={handleAutoSuggest} />}
+          element={<MusicPlayer handleAutoSuggest={handleAutoSuggest}  handlePlay={handlePlay}/>}
         />
       </Routes>
     </div>

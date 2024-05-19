@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext,useRef } from "react";
 import { getSongs, deleteSong } from "../lib/indexedDb";
 import { MusicContext } from "../Components/MusicContext";
 
 // SVG for the three-dot menu
 const ThreeDotMenu = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-three-dots-vertical" viewBox="0 0 16 16">
   <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
 </svg>
 );
@@ -12,7 +12,9 @@ const ThreeDotMenu = () => (
 function Downloads() {
   const [songs, setSongs] = useState([]);
   const [menuVisible, setMenuVisible] = useState(null); // Track visible menu
+  const [currentSongIndex, setCurrentSongIndex] = useState(null);
   const { setCurrentSong } = useContext(MusicContext);
+  const audioRefs = useRef([]); // To keep references to audio elements
 
   useEffect(() => {
     const fetchSongs = async () => {
@@ -22,8 +24,18 @@ function Downloads() {
     fetchSongs();
   }, []);
 
-  const handlePlay = (song) => {
+  const handlePlay = (song, index) => {
     setCurrentSong(song);
+    setCurrentSongIndex(index);
+  };
+
+  const handleEnded = () => {
+    if (currentSongIndex !== null && currentSongIndex < songs.length - 1) {
+      const nextSongIndex = currentSongIndex + 1;
+      setCurrentSong(songs[nextSongIndex]);
+      setCurrentSongIndex(nextSongIndex);
+      document.getElementById(`audio-${nextSongIndex}`).play();
+    }
   };
 
   const handleDelete = async (songId) => {
@@ -40,29 +52,31 @@ function Downloads() {
 
   return (
     <div className="container">
-      <div className="section">
+      <div className="offline-section">
         <h1 className="section-title">🎵 Downloaded Songs</h1>
         {songs.length === 0 ? (
           <p>No songs downloaded yet.</p>
         ) : (
-          <div className="song-list">
-            {songs.map((song) => {
+          <div className="offline-song-list">
+            {songs.map((song,index) => {
               // Create a blob URL for the song blob
               const blobUrl = URL.createObjectURL(song.blob);
               // Add blobUrl property to song object for later cleanup
               song.blobUrl = blobUrl;
 
               return (
-                <div key={song.id} className="offline-song-card">
+                <div key={song.id} className="offline-song-card" >
                   <img src={song.image} alt={song.title} />
                   <div className="song-info">
                     <h3>{song.title}</h3>
                     <p>{song.artist || "unknown"}</p>
                     <audio
+                    id={`audio-${index}`}
                       className="offline-control"
                       src={blobUrl}
                       controls
-                      onPlay={() => handlePlay(song)}
+                      onPlay={() => handlePlay(song, index)}
+                      onEnded={handleEnded}
                     />
                     <div className="menu">
                       <button className="three-dot"

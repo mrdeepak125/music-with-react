@@ -1,8 +1,9 @@
 import { MusicContext } from "./MusicContext";
 import React, { useRef, useState, useEffect, useContext } from "react";
 import { saveSong } from "../lib/indexedDb";
+import { lofiSongs, newSongs, relaxingSongs, romanseSongs } from "../lib/catchedSong";
 
-function MusicPlayer({ handleAutoSuggest }) {
+function MusicPlayer({ handleAutoSuggest,songs, handlePlay }) {
   const { currentSong, suggestedSongs } = useContext(MusicContext);
   const audioRef = useRef(null);
   const [playing, setPlaying] = useState(false);
@@ -10,7 +11,7 @@ function MusicPlayer({ handleAutoSuggest }) {
   const [duration, setDuration] = useState(0);
   const [downloadProgress, setDownloadProgress] = useState(0);
   const [downloadComplete, setDownloadComplete] = useState(false);
-
+  const [quets] = useState(lofiSongs,newSongs,relaxingSongs,romanseSongs);
   const PlayIcon = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -311,6 +312,19 @@ function MusicPlayer({ handleAutoSuggest }) {
                 </li>
               ))}
             </ul>
+          </div><p>NEXT SONGS</p>
+          <div className="next-section">
+            
+            <ul>
+            {quets.map((saveSong) => (
+              <div key={saveSong.id} onClick={() => handlePlay(saveSong)} className="next-song-card">
+                <img src={saveSong.image} alt={saveSong.title} />
+              <div className="next-song-info">
+                <h3>{saveSong.song}</h3>
+                <p>{saveSong.singers || 'unknown'}</p>
+              </div>
+              </div>
+            ))}</ul>
           </div>
         </>
       )}

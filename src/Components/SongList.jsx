@@ -34,7 +34,7 @@ function SongList({ onPlay }) {
             <div key={song.id} className="song-card" onClick={() => handlePlay(song)}>
               <img src={song.image} alt={song.title} />
               <div className="song-info">
-                <h3>{song.title}</h3>
+                <h3>{song.song}</h3>
                 <p>{song.singers || 'unknown'}</p>
               </div>
             </div>
@@ -48,7 +48,7 @@ function SongList({ onPlay }) {
             <div key={song.id} className="song-card" onClick={() => handlePlay(song)}>
               <img src={song.image} alt={song.title} />
               <div className="song-info">
-                <h3>{song.title}</h3>
+                <h3>{song.song}</h3>
                 <p>{song.singers || 'unknown'}</p>
               </div>
             </div>
@@ -62,7 +62,7 @@ function SongList({ onPlay }) {
             <div key={song.id} className="song-card" onClick={() => handlePlay(song)}>
               <img src={song.image} alt={song.title} />
               <div className="song-info">
-                <h3>{song.title}</h3>
+                <h3>{song.song}</h3>
                 <p>{song.singers || 'unknown'}</p>
               </div>
             </div>
