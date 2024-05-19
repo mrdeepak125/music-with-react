@@ -23,3 +23,8 @@ export const getSongs = async () => {
   const db = await initDB();
   return await db.getAll(STORE_NAME);
 };
+
+export const deleteSong = async (id) => {
+  const db = await initDB();
+  await db.delete(STORE_NAME, id);
+};

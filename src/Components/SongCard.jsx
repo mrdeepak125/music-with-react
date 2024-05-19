@@ -1,6 +1,6 @@
 // SongCard.jsx
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function SongCard({ id, image, artist, title, onPlay }) {
   const navigate = useNavigate();

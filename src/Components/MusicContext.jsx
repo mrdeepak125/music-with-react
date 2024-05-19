@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState } from "react";
 
 export const MusicContext = createContext();
 
@@ -8,7 +8,16 @@ export const MusicProvider = ({ children }) => {
   const [searchResults, setSearchResults] = useState([]);
 
   return (
-    <MusicContext.Provider value={{ currentSong, setCurrentSong, suggestedSongs, setSuggestedSongs, searchResults, setSearchResults }}>
+    <MusicContext.Provider
+      value={{
+        currentSong,
+        setCurrentSong,
+        suggestedSongs,
+        setSuggestedSongs,
+        searchResults,
+        setSearchResults,
+      }}
+    >
       {children}
     </MusicContext.Provider>
   );
