@@ -12,6 +12,7 @@ import SongList from "./Components/SongList";
 import SearchResults from "./Components/SearchResults";
 import Downloads from "./Components/DownloadsPage";
 import { MusicContext, MusicProvider } from "./Components/MusicContext";
+import Footer from "./Components/Footer.jsx";
 
 function App() {
   const { setCurrentSong, searchResults, setSuggestedSongs, setSearchResults } =
@@ -65,6 +66,7 @@ function App() {
           element={<MusicPlayer handleAutoSuggest={handleAutoSuggest}  handlePlay={handlePlay}/>}
         />
       </Routes>
+      {/* <Footer />  */}
     </div>
   );
 }

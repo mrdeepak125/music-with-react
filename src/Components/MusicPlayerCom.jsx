@@ -314,8 +314,6 @@ function MusicPlayer({ handleAutoSuggest,songs, handlePlay }) {
             </ul>
           </div><p>NEXT SONGS</p>
           <div className="next-section">
-            
-            <ul>
             {quets.map((saveSong) => (
               <div key={saveSong.id} onClick={() => handlePlay(saveSong)} className="next-song-card">
                 <img src={saveSong.image} alt={saveSong.title} />
@@ -324,7 +322,7 @@ function MusicPlayer({ handleAutoSuggest,songs, handlePlay }) {
                 <p>{saveSong.singers || 'unknown'}</p>
               </div>
               </div>
-            ))}</ul>
+            ))}
           </div>
         </>
       )}

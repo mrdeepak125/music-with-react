@@ -658,6 +658,44 @@ img {
     justify-content: center;
     align-items: stretch;
 }
+
+.footer-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 15px;
+  gap: 15px;
+  background-color: #000000;
+  outline: 3px #181717 solid;
+  outline-offset: -3px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: 400ms;
+}
+
+.footer-button .footer-text {
+  color: var(--gray);
+  font-weight: 700;
+  font-size: 1em;
+  transition: 400ms;
+}
+
+.footer-button svg path {
+  transition: 400ms;
+}
+
+.footer-button:hover {
+  background-color: transparent;
+}
+
+.footer-button:hover .text {
+  color: #181717;
+}
+
+.footer-button:hover svg path {
+  fill: white;
+}
 @media (max-width: 800px) {
   .navbar {
     display: flex;
@@ -959,10 +997,11 @@ img {
     gap: 1.6rem;
     align-items: center;
     justify-content: center;
-    margin: 5px;
+    margin: 3px;
     flex-direction: row;
     flex-wrap: nowrap;
     border-radius: 30px;
+    padding: 15px;
   }
 
   .music-player {
@@ -996,7 +1035,7 @@ img {
   }
 
   .controls input[type="range"] {
-    width: 210px;
+    width: 150px;
   }
 
   .offline-song-card {
@@ -1030,6 +1069,7 @@ img {
 }
   .next-section{
     height: 100px;
+    width: 280px;
   }
 }
 @media (max-width : 350px) {
@@ -1066,5 +1106,10 @@ img {
 .next-section ul {
   height: 300px;
   width: 50px;
+}
+}
+@media (max-width: 340px){
+  .song-list {
+    width: 290px;
 }
 }
