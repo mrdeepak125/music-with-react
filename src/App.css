@@ -735,7 +735,7 @@ img {
     background-position: 400%;
   }
 }
-.next-previous button :before{
+.next-previous button:before{
   content: "";
   position: absolute;
   top: -5px;
@@ -748,7 +748,7 @@ img {
   border-radius: 35px;
   transition: 1s;
 }
-.next-previous button ::before{
+.next-previous button:hover::before{
   filter: blur(20px);
 }
 .next-previous button :active{

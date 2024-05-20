@@ -31,28 +31,37 @@ function Downloads() {
     };
   }, []);
 
-  const handleNext = () => {
-    const player = audioPlayers.current[currentTrack];
-    if (player) {
-      player.pause();
-    }
-    setCurrentTrack((prevTrack) => (prevTrack + 1) % songs.length);
-  };
-
-  const handlePrevious = () => {
-    const player = audioPlayers.current[currentTrack];
-    if (player) {
-      player.pause();
-    }
-    setCurrentTrack((prevTrack) => (prevTrack - 1 + songs.length) % songs.length);
-  };
-
   useEffect(() => {
+    const handleEnded = () => {
+      setCurrentTrack((prevTrack) => (prevTrack + 1) % songs.length);
+    };
+
     const player = audioPlayers.current[currentTrack];
     if (player) {
+      player.addEventListener("ended", handleEnded);
       player.play();
     }
-  }, [currentTrack]);
+
+    return () => {
+      if (player) {
+        player.removeEventListener("ended", handleEnded);
+      }
+    };
+  }, [currentTrack, songs]);
+
+  useEffect(() => {
+    if (audioPlayers.current[currentTrack]) {
+      audioPlayers.current[currentTrack].play();
+    }
+  }, [songs]);
+
+  const playTrack = (trackIndex) => {
+    if (audioPlayers.current[currentTrack]) {
+      audioPlayers.current[currentTrack].pause();
+      audioPlayers.current[currentTrack].currentTime = 0;
+    }
+    setCurrentTrack(trackIndex);
+  };
 
   const handleDelete = async (songId) => {
     await deleteSong(songId);
@@ -80,10 +89,14 @@ function Downloads() {
                     controls
                   />
                   <div className="next-previous">
-                    <button  onClick={handlePrevious}>
+                    <button
+                      onClick={() => playTrack((currentTrack - 1 + songs.length) % songs.length)}
+                    >
                       Previous
                     </button>
-                    <button  onClick={handleNext}>
+                    <button
+                      onClick={() => playTrack((currentTrack + 1) % songs.length)}
+                    >
                       Next
                     </button>
                   </div>
