@@ -255,6 +255,23 @@ function MusicPlayer({ handleAutoSuggest,songs, handlePlay }) {
       currentSong(nextSong);
     }
   };
+  useEffect(() => {
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = new window.MediaMetadata({
+        title: currentSong?.song,
+        artist: currentSong?.singers,
+        album: 'Music World',
+        artwork: [
+          { src: currentSong?.image, sizes: '512x512', type: 'image/png' },
+        ]
+      });
+
+      navigator.mediaSession.setActionHandler('play', () => audioRef.current.play());
+      navigator.mediaSession.setActionHandler('pause', () => audioRef.current.pause());
+      navigator.mediaSession.setActionHandler('previoustrack', () => handlePrevious());
+      navigator.mediaSession.setActionHandler('nexttrack', () => handleNext());
+    }
+  }, [currentSong]);
   return (
     <div className="music-player">
       {currentSong && (
