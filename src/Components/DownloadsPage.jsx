@@ -53,7 +53,8 @@ function Downloads() {
     if (audioPlayers.current[currentTrack]) {
       audioPlayers.current[currentTrack].play();
     }
-  }, [songs]);
+    updateMediaSession();
+  }, [songs, currentTrack]);
 
   const playTrack = (trackIndex) => {
     if (audioPlayers.current[currentTrack]) {
@@ -67,6 +68,49 @@ function Downloads() {
     await deleteSong(songId);
     setSongs(songs.filter(song => song.id !== songId));
   };
+
+  const updateMediaSession = () => {
+    const song = songs[currentTrack];
+    if ('mediaSession' in navigator && song) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: song.title,
+        artist: song.artist || "unknown",
+        album: "Downloaded Songs",
+        artwork: [
+          { src: song.image, sizes: '512x512', type: 'image/png' }
+        ]
+      });
+
+      navigator.mediaSession.setActionHandler('previoustrack', () => {
+        playTrack((currentTrack - 1 + songs.length) % songs.length);
+      });
+
+      navigator.mediaSession.setActionHandler('nexttrack', () => {
+        playTrack((currentTrack + 1) % songs.length);
+      });
+
+      navigator.mediaSession.setActionHandler('play', () => {
+        audioPlayers.current[currentTrack].play();
+      });
+
+      navigator.mediaSession.setActionHandler('pause', () => {
+        audioPlayers.current[currentTrack].pause();
+      });
+    }
+  };
+
+  const handleClickOutsideMenu = (event) => {
+    if (menuVisible && !event.target.closest('.menu')) {
+      setMenuVisible(null);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutsideMenu);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutsideMenu);
+    };
+  }, [menuVisible]);
 
   return (
     <div className="container">
@@ -82,23 +126,32 @@ function Downloads() {
                 <div className="song-info">
                   <h3>{song.title}</h3>
                   <p>{song.artist || "unknown"}</p>
-                  <audio
-                    ref={el => (audioPlayers.current[index] = el)}
-                    className="offline-control"
-                    src={song.blobUrl}
-                    controls
-                  />
-                  <div className="next-previous">
-                    <button
-                      onClick={() => playTrack((currentTrack - 1 + songs.length) % songs.length)}
-                    >
-                      Previous
-                    </button>
-                    <button
-                      onClick={() => playTrack((currentTrack + 1) % songs.length)}
-                    >
-                      Next
-                    </button>
+                  <div className="audio-control">
+                    {/* <div className="audio-info">
+                      <img src={song.image} alt={song.title} className="audio-image" />
+                      <div className="audio-details">
+                        <h3>{song.title}</h3>
+                        <p>{song.artist || "unknown"}</p>
+                      </div>
+                    </div> */}
+                    <audio
+                      ref={el => (audioPlayers.current[index] = el)}
+                      className="offline-control"
+                      src={song.blobUrl}
+                      controls
+                    />
+                    <div className="next-previous">
+                      <button
+                        onClick={() => playTrack((currentTrack - 1 + songs.length) % songs.length)}
+                      >
+                        Previous
+                      </button>
+                      <button
+                        onClick={() => playTrack((currentTrack + 1) % songs.length)}
+                      >
+                        Next
+                      </button>
+                    </div>
                   </div>
                   <div className="menu">
                     <button
