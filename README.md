@@ -41,7 +41,7 @@ Visit [https://musiclocation.netlify.app/](https://musiclocation.netlify.app/)
 1.Clone the repository:
 
 ```bash
-git clone https://github.com/r2hu1/music-with-react.git
+git clone https://github.com/mrdeepak125/music-with-react.git
 cd music-with-react
 ```
 
