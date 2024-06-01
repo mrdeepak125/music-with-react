@@ -12,6 +12,7 @@ Music World is a web music app built using Next.js 14, App Router, and an unoffi
  - Light and Dark mode for user preference.
  - Search for your favorite artists, albums, and tracks.
  - Enjoy a seamless music listening experience.
+ - Offline- liten music / Download music
 ## Screenshots
 
 ### Light Mode Homepage
@@ -25,6 +26,11 @@ Music World is a web music app built using Next.js 14, App Router, and an unoffi
 ### Music Page
 
 ![Music Page](https://github.com/mrdeepak125/music-with-react/assets/135497307/a445e761-bad5-4d53-851f-20e3a6ff95df)
+
+### Offline-Listen
+
+![Offline-Listen](https://github.com/mrdeepak125/music-with-react/assets/135497307/d8c721b8-58c1-46c9-aa56-3e9547f8346a)
+
 
 ## Installation
 1.Clone the repository:
