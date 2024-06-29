@@ -12,6 +12,13 @@
 * Browsers: last 4 version
 */
 
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v8.4.14,
+* Autoprefixer: v10.4.7
+* Browsers: last 4 version
+*/
+
 :root {
   --black: #141619;
   --gray: #2C2E3A;
@@ -551,7 +558,7 @@ img {
 .song-info h3 {
   font-size: 20px;
   /* margin: 10px 0; */
-  max-width: 10.625rem;
+  width: 10.625rem;
   -o-text-overflow: ellipsis;
      text-overflow: ellipsis;
   white-space: nowrap;
@@ -561,7 +568,7 @@ img {
 .song-info p {
   font-size: 14px;
   /* color: var(--white); */
-  max-width: 10.625rem;
+  width: 10.625rem;
   -o-text-overflow: ellipsis;
      text-overflow: ellipsis;
   white-space: nowrap;
