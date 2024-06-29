@@ -130,21 +130,10 @@ function Downloads({ onPlay }) {
             {songs.map((song, index) => (
               <div key={song.id} className="offline-song-card">
                 <img src={song.image} alt={song.title} onClick={() => handleSongClick(song)} />
-                <div className="song-info">
+                <div className="song-info" onClick={() => handleSongClick(song)}>
                   <h3>{song.title}</h3>
                   <p>{song.artist || "unknown"}</p>
-                  {/* <div className="audio-control">
-                    <audio
-                      ref={el => (audioPlayers.current[index] = el)}
-                      className="offline-control"
-                      src={song.blobUrl}
-                      controls
-                    />
-                    <div className="next-previous">
-                      <button onClick={() => playTrack((currentTrack - 1 + songs.length) % songs.length)}>Previous</button>
-                      <button onClick={() => playTrack((currentTrack + 1) % songs.length)}>Next</button>
-                    </div>
-                  </div> */}
+                </div>
                   <div className="menu">
                     <button className="three-dot" onClick={() => setMenuVisible(menuVisible === song.id ? null : song.id)}>
                       <ThreeDotMenu />
@@ -159,7 +148,6 @@ function Downloads({ onPlay }) {
                       </div>
                     )}
                   </div>
-                </div>
               </div>
             ))}
           </div>
