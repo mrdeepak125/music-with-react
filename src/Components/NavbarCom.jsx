@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Search from '../assets/img/system-solid-42-search .png';
+import Search from '../assets/img/search.svg';
 import { getSongsByQuery } from '../lib/fetch';
 import { useNavigate } from 'react-router-dom';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
