@@ -22,7 +22,7 @@ function App() {
   const handlePlay = (song) => {
     setCurrentSong(song);
     setSuggestedSongs(searchResults.filter((s) => s.id !== song.id));
-    navigate("/player");
+    navigate(`/player/${song.id}`);
   };
 
   const handleAutoSuggest = (song) => {
@@ -48,10 +48,7 @@ function App() {
       <Navbar updateSearchResults={setSearchResults} />
       <Routes>
         <Route path="/" element={<SongList onPlay={handlePlay} />} />
-        <Route
-          path="/downloads"
-          element={<Downloads handlePlay={handlePlay} />}
-        />
+        <Route path="/downloads" element={<Downloads onPlay={handlePlay} />} />
         <Route
           path="/search"
           element={
@@ -62,11 +59,11 @@ function App() {
           }
         />
         <Route
-          path="/player"
-          element={<MusicPlayer handleAutoSuggest={handleAutoSuggest}  handlePlay={handlePlay}/>}
+          path="/player/:id"
+          element={<MusicPlayer handleAutoSuggest={handleAutoSuggest} handlePlay={handlePlay} />}
         />
       </Routes>
-      {/* <Footer />  */}
+      {/* <Footer /> */}
     </div>
   );
 }

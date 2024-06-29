@@ -8,7 +8,7 @@ function SongList({ onPlay }) {
 
   const handlePlay = (song) => {
     onPlay(song);
-    navigate('/player');
+    navigate(`/player/${song.id}`);
   };
 
   return (

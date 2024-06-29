@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { getSongs, deleteSong } from "../lib/indexedDb";
 import { MusicContext } from "../Components/MusicContext";
+import { useNavigate } from "react-router-dom";
 
 // SVG for the three-dot menu
 const ThreeDotMenu = () => (
@@ -9,12 +10,13 @@ const ThreeDotMenu = () => (
   </svg>
 );
 
-function Downloads() {
+function Downloads({ onPlay }) {
   const [songs, setSongs] = useState([]);
   const [menuVisible, setMenuVisible] = useState(null);
   const [currentTrack, setCurrentTrack] = useState(0);
   const { setCurrentSong } = useContext(MusicContext);
   const audioPlayers = useRef([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSongs = async () => {
@@ -39,7 +41,7 @@ function Downloads() {
     const player = audioPlayers.current[currentTrack];
     if (player) {
       player.addEventListener("ended", handleEnded);
-      player.play();
+      // player.play();
     }
 
     return () => {
@@ -51,7 +53,7 @@ function Downloads() {
 
   useEffect(() => {
     if (audioPlayers.current[currentTrack]) {
-      audioPlayers.current[currentTrack].play();
+      // audioPlayers.current[currentTrack].play();
     }
     updateMediaSession();
   }, [songs, currentTrack]);
@@ -112,6 +114,11 @@ function Downloads() {
     };
   }, [menuVisible]);
 
+  const handleSongClick = (song) => {
+    onPlay(song);
+    navigate(`/player/${song.id}`);
+  };
+
   return (
     <div className="container">
       <div className="offline-section">
@@ -122,18 +129,11 @@ function Downloads() {
           <div className="offline-song-list">
             {songs.map((song, index) => (
               <div key={song.id} className="offline-song-card">
-                <img src={song.image} alt={song.title} />
+                <img src={song.image} alt={song.title} onClick={() => handleSongClick(song)} />
                 <div className="song-info">
                   <h3>{song.title}</h3>
                   <p>{song.artist || "unknown"}</p>
-                  <div className="audio-control">
-                    {/* <div className="audio-info">
-                      <img src={song.image} alt={song.title} className="audio-image" />
-                      <div className="audio-details">
-                        <h3>{song.title}</h3>
-                        <p>{song.artist || "unknown"}</p>
-                      </div>
-                    </div> */}
+                  {/* <div className="audio-control">
                     <audio
                       ref={el => (audioPlayers.current[index] = el)}
                       className="offline-control"
@@ -141,23 +141,12 @@ function Downloads() {
                       controls
                     />
                     <div className="next-previous">
-                      <button
-                        onClick={() => playTrack((currentTrack - 1 + songs.length) % songs.length)}
-                      >
-                        Previous
-                      </button>
-                      <button
-                        onClick={() => playTrack((currentTrack + 1) % songs.length)}
-                      >
-                        Next
-                      </button>
+                      <button onClick={() => playTrack((currentTrack - 1 + songs.length) % songs.length)}>Previous</button>
+                      <button onClick={() => playTrack((currentTrack + 1) % songs.length)}>Next</button>
                     </div>
-                  </div>
+                  </div> */}
                   <div className="menu">
-                    <button
-                      className="three-dot"
-                      onClick={() => setMenuVisible(menuVisible === song.id ? null : song.id)}
-                    >
+                    <button className="three-dot" onClick={() => setMenuVisible(menuVisible === song.id ? null : song.id)}>
                       <ThreeDotMenu />
                     </button>
                     {menuVisible === song.id && (

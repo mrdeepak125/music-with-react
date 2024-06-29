@@ -272,6 +272,96 @@ function MusicPlayer({ handleAutoSuggest,songs, handlePlay }) {
       navigator.mediaSession.setActionHandler('nexttrack', () => handleNext());
     }
   }, [currentSong]);
+  useEffect(() => {
+    const audio = audioRef.current;
+
+    const handleLoadedData = () => {
+      setDuration(audio.duration);
+      audio.play().then(() => {
+        setPlaying(true);
+      }).catch((error) => {
+        console.error("Error playing audio:", error);
+      });
+    };
+
+    const handleTimeUpdate = () => {
+      setCurrentTime(audio.currentTime);
+    };
+
+    const handleError = () => {
+      console.error("Error loading audio source");
+      setPlaying(false);
+    };
+
+    if (currentSong) {
+      if (currentSong.blobUrl) {
+        audio.src = currentSong.blobUrl;
+      } else {
+        audio.src = currentSong.media_url;
+      }
+      audio.load(); // Ensure the audio is loaded
+      audio.addEventListener("loadeddata", handleLoadedData);
+      audio.addEventListener("timeupdate", handleTimeUpdate);
+      audio.addEventListener("error", handleError);
+    }
+
+    return () => {
+      audio.removeEventListener("loadeddata", handleLoadedData);
+      audio.removeEventListener("timeupdate", handleTimeUpdate);
+      audio.removeEventListener("error", handleError);
+    };
+  }, [currentSong]);
+
+  const togglePlay = () => {
+    const audio = audioRef.current;
+    if (playing) {
+      audio.pause();
+    } else {
+      audio.play();
+    }
+    setPlaying(!playing);
+  };
+
+  const skipForward = () => {
+    const currentIndex = songs.findIndex((song) => song.id === currentSong.id);
+    if (currentIndex !== -1) {
+      const nextIndex = (currentIndex + 1) % songs.length;
+      setCurrentSong(songs[nextIndex]);
+    }
+  };
+
+  const skipBackward = () => {
+    const currentIndex = songs.findIndex((song) => song.id === currentSong.id);
+    if (currentIndex !== -1) {
+      const prevIndex = (currentIndex - 1 + songs.length) % songs.length;
+      setCurrentSong(songs[prevIndex]);
+    }
+  };
+
+  const handleDownload = async () => {
+    try {
+      setIsDownloading(true);
+      await saveSong(currentSong, setDownloadProgress);
+      setDownloadComplete(true);
+      setIsDownloading(false);
+    } catch (error) {
+      console.error("Error downloading song:", error);
+      setIsDownloading(false);
+    }
+    useEffect(() => {
+      const handleKeyDown = (event) => {
+        if (event.code === "Space") {
+          event.preventDefault();
+          togglePlayPause();
+        }
+      };
+  
+      document.addEventListener("keydown", handleKeyDown);
+      return () => {
+        document.removeEventListener("keydown", handleKeyDown);
+      };
+    }, [togglePlayPause]);
+  };
   return (
     <div className="music-player">
       {currentSong && (
