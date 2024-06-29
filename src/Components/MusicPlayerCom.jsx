@@ -1,17 +1,25 @@
 import { MusicContext } from "./MusicContext";
 import React, { useRef, useState, useEffect, useContext } from "react";
-import { saveSong } from "../lib/indexedDb";
-import { lofiSongs, newSongs, relaxingSongs, romanseSongs } from "../lib/catchedSong";
+import { getSongs, saveSong } from "../lib/indexedDb";
+import {
+  lofiSongs,
+  newSongs,
+  relaxingSongs,
+  romanseSongs,
+} from "../lib/catchedSong";
 
-function MusicPlayer({ handleAutoSuggest,songs, handlePlay }) {
-  const { currentSong, suggestedSongs } = useContext(MusicContext);
+function MusicPlayer({ handleAutoSuggest, handlePlay }) {
+  const { currentSong, setCurrentSong, suggestedSongs } =
+    useContext(MusicContext);
   const audioRef = useRef(null);
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [downloadProgress, setDownloadProgress] = useState(0);
   const [downloadComplete, setDownloadComplete] = useState(false);
-  const [quets] = useState(lofiSongs,newSongs,relaxingSongs,romanseSongs);
+  const [quets] = useState(lofiSongs, newSongs, relaxingSongs, romanseSongs);
+  const [songs, setSongs] = useState([]);
+
   const PlayIcon = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -106,6 +114,23 @@ function MusicPlayer({ handleAutoSuggest,songs, handlePlay }) {
   );
 
   useEffect(() => {
+    const fetchSongs = async () => {
+      const savedSongs = await getSongs();
+      setSongs(
+        savedSongs.map((song) => ({
+          ...song,
+          blobUrl: URL.createObjectURL(song.blob),
+        }))
+      );
+    };
+    fetchSongs();
+
+    return () => {
+      songs.forEach((song) => URL.revokeObjectURL(song.blobUrl));
+    };
+  }, []);
+
+  useEffect(() => {
     const audio = audioRef.current;
 
     const handleLoadedData = () => {
@@ -183,11 +208,15 @@ function MusicPlayer({ handleAutoSuggest,songs, handlePlay }) {
     setPlaying(!playing);
   };
   const handleForward = () => {
-    audioRef.current.currentTime += 10;
+    const currentIndex = songs.findIndex((song) => song.id === currentSong.id);
+    const nextIndex = (currentIndex + 1) % songs.length;
+    setCurrentSong(songs[nextIndex]);
   };
 
   const handleBackward = () => {
-    audioRef.current.currentTime -= 10;
+    const currentIndex = songs.findIndex((song) => song.id === currentSong.id);
+    const prevIndex = (currentIndex - 1 + songs.length) % songs.length;
+    setCurrentSong(songs[prevIndex]);
   };
 
   const handleReplay = () => {
@@ -244,32 +273,84 @@ function MusicPlayer({ handleAutoSuggest,songs, handlePlay }) {
       setIsDownloading(false);
     }
   };
-
   const handleEnded = () => {
-    // Get the next song in the suggestedSongs list
-    const currentIndex = suggestedSongs.findIndex(
-      (song) => song.id === currentSong.id
-    );
-    const nextSong = suggestedSongs[currentIndex + 1];
-    if (nextSong) {
-      currentSong(nextSong);
-    }
+    const currentIndex = songs.findIndex((song) => song.id === currentSong.id);
+    const nextIndex = (currentIndex + 1) % songs.length; // Loop back to the first song if at the end
+    setCurrentSong(songs[nextIndex]);
   };
+
   useEffect(() => {
-    if ('mediaSession' in navigator) {
+    const audio = audioRef.current;
+
+    const handleLoadedData = () => {
+      setDuration(audio.duration);
+      audio
+        .play()
+        .then(() => {
+          setPlaying(true);
+        })
+        .catch((error) => {
+          console.error("Error playing audio:", error);
+        });
+    };
+
+    const handleTimeUpdate = () => {
+      setCurrentTime(audio.currentTime);
+    };
+
+    const handleError = () => {
+      console.error("Error loading audio source");
+      setPlaying(false);
+    };
+
+    if (currentSong) {
+      audio.src = currentSong.blobUrl || currentSong.media_url;
+      audio.load();
+      audio.addEventListener("loadeddata", handleLoadedData);
+      audio.addEventListener("timeupdate", handleTimeUpdate);
+      audio.addEventListener("ended", handleEnded);
+      audio.addEventListener("error", handleError);
+    }
+
+    return () => {
+      audio.removeEventListener("loadeddata", handleLoadedData);
+      audio.removeEventListener("timeupdate", handleTimeUpdate);
+      audio.removeEventListener("ended", handleEnded);
+      audio.removeEventListener("error", handleError);
+    };
+  }, [currentSong, songs]);
+  // const handleEnded = () => {
+  //   // Get the next song in the suggestedSongs list
+  //   const currentIndex = suggestedSongs.findIndex(
+  //     (song) => song.id === currentSong.id
+  //   );
+  //   const nextSong = suggestedSongs[currentIndex + 1];
+  //   if (nextSong) {
+  //     currentSong(nextSong);
+  //   }
+  // };
+
+  useEffect(() => {
+    if ("mediaSession" in navigator) {
       navigator.mediaSession.metadata = new window.MediaMetadata({
         title: currentSong?.song,
         artist: currentSong?.singers,
-        album: 'Music World',
+        album: "Music World",
         artwork: [
-          { src: currentSong?.image, sizes: '512x512', type: 'image/png' },
-        ]
+          { src: currentSong?.image, sizes: "512x512", type: "image/png" },
+        ],
       });
 
-      navigator.mediaSession.setActionHandler('play', () => audioRef.current.play());
-      navigator.mediaSession.setActionHandler('pause', () => audioRef.current.pause());
-      navigator.mediaSession.setActionHandler('previoustrack', () => handlePrevious());
-      navigator.mediaSession.setActionHandler('nexttrack', () => handleNext());
+      navigator.mediaSession.setActionHandler("play", () =>
+        audioRef.current.play()
+      );
+      navigator.mediaSession.setActionHandler("pause", () =>
+        audioRef.current.pause()
+      );
+      navigator.mediaSession.setActionHandler("previoustrack", () =>
+        handlePrevious()
+      );
+      navigator.mediaSession.setActionHandler("nexttrack", () => handleNext());
     }
   }, [currentSong]);
   useEffect(() => {
@@ -277,11 +358,14 @@ function MusicPlayer({ handleAutoSuggest,songs, handlePlay }) {
 
     const handleLoadedData = () => {
       setDuration(audio.duration);
-      audio.play().then(() => {
-        setPlaying(true);
-      }).catch((error) => {
-        console.error("Error playing audio:", error);
-      });
+      audio
+        .play()
+        .then(() => {
+          setPlaying(true);
+        })
+        .catch((error) => {
+          console.error("Error playing audio:", error);
+        });
     };
 
     const handleTimeUpdate = () => {
@@ -355,7 +439,7 @@ function MusicPlayer({ handleAutoSuggest,songs, handlePlay }) {
           togglePlayPause();
         }
       };
-  
+
       document.addEventListener("keydown", handleKeyDown);
       return () => {
         document.removeEventListener("keydown", handleKeyDown);
@@ -419,15 +503,20 @@ function MusicPlayer({ handleAutoSuggest,songs, handlePlay }) {
                 </li>
               ))}
             </ul>
-          </div><p>NEXT SONGS</p>
+          </div>
+          <p>NEXT SONGS</p>
           <div className="next-section">
-            {quets.map((saveSong) => (
-              <div key={saveSong.id} onClick={() => handlePlay(saveSong)} className="next-song-card">
-                <img src={saveSong.image} alt={saveSong.title} />
-              <div className="next-song-info">
-                <h3>{saveSong.song}</h3>
-                <p>{saveSong.singers || 'unknown'}</p>
-              </div>
+            {songs.map((song) => (
+              <div
+                key={song.id}
+                onClick={() => handlePlay(song)}
+                className="next-song-card"
+              >
+                <img src={song.image} alt={song.title} />
+                <div className="next-song-info">
+                  <h3>{song.title}</h3>
+                  <p>{song.artist || "unknown"}</p>
+                </div>
               </div>
             ))}
           </div>
