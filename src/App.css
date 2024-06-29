@@ -683,6 +683,7 @@ img {
   border-radius: 20px;
   gap: 15%;
   margin-top: 10px;
+  cursor: pointer;
 }
 
 .offline-song-card img {
