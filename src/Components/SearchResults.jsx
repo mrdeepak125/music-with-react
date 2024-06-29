@@ -9,7 +9,7 @@ function SearchResults({ searchResults, handlePlay }) {
         {searchResults.length === 0 ? (
           <div className="empty-results">
             <img src={NoResult} alt="No Results" />
-            <p>No results found</p>
+            <h1>No results found</h1>
           </div>
         ) : (
           <div className="song-list">

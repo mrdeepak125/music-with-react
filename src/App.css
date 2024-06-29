@@ -1087,6 +1087,9 @@ img {
 }
 
 @media (max-width: 800px) {
+  .navbar .dark-mode{
+    display: none;
+  }
   .navbar {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -1098,9 +1101,9 @@ img {
     /* width: 100%; */
   }
 
-  .right-section input {
+  /* .right-section input {
     width: 17rem;
-  }
+  } */
 
   .container {
     display: -webkit-box;
@@ -1201,6 +1204,9 @@ img {
 }
 
 @media (max-width: 750px) {
+  .empty-results img {
+    height: 50vh;
+}
   .navbar {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -1214,9 +1220,9 @@ img {
         flex-wrap: nowrap;
   }
 
-  .right-section input {
+  /* .right-section input {
     width: 12rem;
-  }
+  } */
 
   .container {
     display: -webkit-box;
@@ -1366,6 +1372,9 @@ img {
 
 
 @media (max-width: 630px) {
+  .empty-results img {
+    height: 40vh;
+}
   .navbar {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -1380,7 +1389,7 @@ img {
   }
 
   .right-section input {
-    width: 8rem;
+    width: 17rem;
   }
 
   .container {
@@ -1537,6 +1546,9 @@ img {
 
 
 @media (max-width : 450px) {
+  .empty-results img {
+    height: 30vh;
+}
   .navbar {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -1554,7 +1566,7 @@ img {
   }
 
   .right-section input {
-    width: 6rem;
+    width: 13rem;
   }
 
   .container {
@@ -1758,18 +1770,16 @@ img {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-orient: vertical;
+    -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
+        -ms-flex-direction: row;
+            flex-direction: row;
     -ms-flex-wrap: nowrap;
         flex-wrap: nowrap;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
+  }
+
+  .right-section input {
+    width: 10rem;
   }
 
   .next-song-card {
@@ -1829,4 +1839,154 @@ img {
   .song-list {
     width: 290px;
   }
+}
+
+/* Add these styles to your CSS file or within a styled-component */
+.menu-slider {
+  position: fixed;
+  top: 60px;
+  left: -250px; /* Start off-screen */
+  width: 250px;
+  height: 100%;
+  background-color: rgb(3 37 66);
+  color: #B3B4BD;
+  transition: left 0.4s ease;
+  z-index: 1000;
+  padding: 20px;
+}
+.menu-slider a{
+  color: white;
+  text-decoration: none;
+  margin-right: 20px;
+}
+.menu-slider.open {
+  left: 0; /* Slide into view */
+}
+
+.menu-toggle {
+  display: none;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.menu-toggle div{
+  width: 25px;
+  height: 2px;
+  background-color: white;
+  margin: 4px 0;
+}
+
+@media (max-width: 900px) {
+  .menu-toggle {
+    display: block; /* Show menu toggle for small screens */
+  }
+
+  .left-section {
+    display: none; /* Hide left section for small screens */
+  }
+
+  .menu-slider {
+    left: -250px; /* Ensure menu is hidden initially */
+  }
+
+  .menu-slider.open {
+    left: 0; /* Slide into view */
+  }
+}
+
+@media (min-width: 900px) {
+  .menu-slider {
+    display: none; /* Hide menu slider for large screens */
+  }
+
+  .left-section {
+    display: flex; /* Show left section for large screens */
+  }
+}
+
+.navbar .menu-slider .first-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  -ms-flex-line-pack: center;
+  align-content: center;
+  width: 100%;
+}
+
+.navbar .menu-slider .second-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  -ms-flex-line-pack: center;
+  align-content: center;
+  width: 100%;
+}
+
+.navbar .menu-slider .third-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  -ms-flex-line-pack: center;
+  align-content: center;
+  width: 100%;
+}
+
+.navbar .menu-slider .four-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-line-pack: center;
+  align-content: center;
+  width: 100%;
 }

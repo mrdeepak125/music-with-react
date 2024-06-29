@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import { getSongs, deleteSong } from "../lib/indexedDb";
 import { MusicContext } from "../Components/MusicContext";
 import { useNavigate } from "react-router-dom";
+import Empty from "../assets/img/empty.png";
 
 // SVG for the three-dot menu
 const ThreeDotMenu = () => (
@@ -124,7 +125,10 @@ function Downloads({ onPlay }) {
       <div className="offline-section">
         <h1 className="section-title">🎵 Downloaded Songs</h1>
         {songs.length === 0 ? (
-          <p>No songs downloaded yet.</p>
+          <div className="empty-results">
+            <img src={Empty} alt="No Results" />
+          <h1>No songs downloaded yet.</h1>
+          </div>
         ) : (
           <div className="offline-song-list">
             {songs.map((song, index) => (
