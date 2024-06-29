@@ -5,6 +5,13 @@
 * Browsers: last 4 version
 */
 
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v8.4.14,
+* Autoprefixer: v10.4.7
+* Browsers: last 4 version
+*/
+
 :root {
   --black: #141619;
   --gray: #2C2E3A;
@@ -995,8 +1002,8 @@ img {
   height: 3em;
   line-height: 2em;
   text-align: center;
-  background: -webkit-gradient(linear, left top, right top, from(#03a9f4), color-stop(#f441a5), color-stop(#ffeb3b), to(#03a9f4));
   background: -o-linear-gradient(left, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
+  background: -webkit-gradient(linear, left top, right top, from(#03a9f4), color-stop(#f441a5), color-stop(#ffeb3b), to(#03a9f4));
   background: linear-gradient(90deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
   background-size: 300%;
   border-radius: 30px;
@@ -1037,8 +1044,8 @@ img {
   right: -5px;
   bottom: -5px;
   z-index: -1;
-  background: -webkit-gradient(linear, left top, right top, from(#03a9f4), color-stop(#f441a5), color-stop(#ffeb3b), to(#03a9f4));
   background: -o-linear-gradient(left, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
+  background: -webkit-gradient(linear, left top, right top, from(#03a9f4), color-stop(#f441a5), color-stop(#ffeb3b), to(#03a9f4));
   background: linear-gradient(90deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
   background-size: 400%;
   border-radius: 35px;
@@ -1680,24 +1687,23 @@ img {
 
   .song-info p {
     font-size: 14px;
-    /* color: var(--white); */
-    max-width: 7.625rem;
+    width: 7.625rem;
     -o-text-overflow: ellipsis;
-       text-overflow: ellipsis;
+    text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
     margin-bottom: 40px;
-  }
+}
 
-  .song-info h3 {
-    font-size: 18px;
-    margin: 20px 0;
-    max-width: 7.625rem;
-    -o-text-overflow: ellipsis;
-       text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-  }
+.song-info h3 {
+  font-size: 18px;
+  margin: 20px 0;
+  width: 7.625rem;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
 
   .next-section {
     height: 100px;
