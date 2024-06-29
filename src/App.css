@@ -860,6 +860,7 @@ img {
   border-radius: 20px;
   width: 350px;
   margin: 15px;
+  cursor: pointer;
 }
 
 .next-song-card img {

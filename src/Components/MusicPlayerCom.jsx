@@ -1,12 +1,7 @@
 import { MusicContext } from "./MusicContext";
 import React, { useRef, useState, useEffect, useContext } from "react";
 import { getSongs, saveSong } from "../lib/indexedDb";
-import {
-  lofiSongs,
-  newSongs,
-  relaxingSongs,
-  romanseSongs,
-} from "../lib/catchedSong";
+import { allsongs } from "../lib/nextsong";
 
 function MusicPlayer({ handleAutoSuggest, handlePlay }) {
   const { currentSong, setCurrentSong, suggestedSongs } =
@@ -17,7 +12,6 @@ function MusicPlayer({ handleAutoSuggest, handlePlay }) {
   const [duration, setDuration] = useState(0);
   const [downloadProgress, setDownloadProgress] = useState(0);
   const [downloadComplete, setDownloadComplete] = useState(false);
-  const [quets] = useState(lofiSongs, newSongs, relaxingSongs, romanseSongs);
   const [songs, setSongs] = useState([]);
 
   const PlayIcon = () => (
@@ -154,13 +148,6 @@ function MusicPlayer({ handleAutoSuggest, handlePlay }) {
       setPlaying(false);
     };
 
-    // if (currentSong) {
-    //   audio.src = currentSong.media_url;
-    //   audio.load(); // Ensure the audio is loaded
-    //   audio.addEventListener('loadeddata', handleLoadedData);
-    //   audio.addEventListener('timeupdate', handleTimeUpdate);
-    //   audio.addEventListener('error', handleError);
-    // }
     if (currentSong && currentSong.media_url) {
       audio.src = currentSong.media_url;
       audio.load(); // Ensure the audio is loaded
@@ -171,13 +158,6 @@ function MusicPlayer({ handleAutoSuggest, handlePlay }) {
     }
 
     return () => {
-      //     if (audio) {
-      //       audio.removeEventListener('loadeddata', handleLoadedData);
-      //       audio.removeEventListener('timeupdate', handleTimeUpdate);
-      //       audio.removeEventListener('error', handleError);
-      //     }
-      //   };
-      // }, [currentSong]);
       if (audio) {
         audio.removeEventListener("loadeddata", handleLoadedData);
         audio.removeEventListener("timeupdate", handleTimeUpdate);
@@ -319,16 +299,7 @@ function MusicPlayer({ handleAutoSuggest, handlePlay }) {
       audio.removeEventListener("error", handleError);
     };
   }, [currentSong, songs]);
-  // const handleEnded = () => {
-  //   // Get the next song in the suggestedSongs list
-  //   const currentIndex = suggestedSongs.findIndex(
-  //     (song) => song.id === currentSong.id
-  //   );
-  //   const nextSong = suggestedSongs[currentIndex + 1];
-  //   if (nextSong) {
-  //     currentSong(nextSong);
-  //   }
-  // };
+
 
   useEffect(() => {
     if ("mediaSession" in navigator) {
